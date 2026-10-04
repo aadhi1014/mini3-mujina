@@ -1,7 +1,14 @@
 /*
- * GPIO control for this board's control-board relay outputs (RO0-RO3)
- * and the ASIC chain reset line, via the RT-Smart /dev/gpio character
- * device.
+ * GPIO control for Mini3's single ASIC chain-control line (reset /
+ * config-mode gate), via the RT-Smart /dev/gpio character device.
+ *
+ * Ported from Nano3s's pin_ctrl.c. Nano3s has a 4-relay control board
+ * (RO0-RO3, GPIO2-5) used as a config-mode gate separate from its own
+ * GPIO31 RST; Mini3 has no relay board -- RE of Mini3's stock firmware
+ * found exactly one GPIO (31) covering this whole role (see pin_ctrl.h),
+ * so the relay_pins[] array and gpio_set_value() indirection are dropped
+ * and ENTER_CONFIG_MODE/ENTER_WORK_MODE now call gpio_asic_rst_assert()/
+ * deassert() directly.
  */
 
 #include <stdint.h>
@@ -23,33 +30,13 @@ typedef struct {
         unsigned short value;
 } gpio_ioctl_arg_t;
 
-/* Control-board relay outputs (RO0-RO3), by GPIO number. */
-static const int relay_pins[4] = { 2, 3, 4, 5 };
-
 static int gpio_dev_fd = -1;
 
 void gpio_init(uint8_t cnt)
 {
-        gpio_ioctl_arg_t arg;
-        int i;
+        (void)cnt; /* Mini3 has no relay board -- nothing to size this by */
 
         gpio_dev_fd = open("/dev/gpio", O_RDWR);
-        if (gpio_dev_fd < 0) {
-                return;
-        }
-
-        for (i = 0; i < cnt; i++) {
-                arg.pin = relay_pins[i];
-                ioctl(gpio_dev_fd, KD_IOCTL_SET_OUTPUT, &arg);
-        }
-}
-
-void gpio_set_value(uint8_t m, uint8_t value)
-{
-        gpio_ioctl_arg_t arg;
-
-        arg.pin = relay_pins[m];
-        ioctl(gpio_dev_fd, value ? KD_IOCTL_WRITE_HIGH : KD_IOCTL_WRITE_LOW, &arg);
 }
 
 int gpio_asic_rst_init(void)

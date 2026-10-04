@@ -3,3 +3,5 @@ Cargo.lock
 /.cache/
 /bundle_tmp.bin
 *-bundle.bin
+/rtos_core/build/
+/rtos_core/vendor/

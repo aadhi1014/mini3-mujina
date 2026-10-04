@@ -29,6 +29,15 @@
 #define SHAREFS_WDOG_LOG "/sharefs/wdog.log"
 #define SHAREFS_SHATEST_LOG "/sharefs/shatest.log"
 #define SHAREFS_WORK4_LOG "/sharefs/work4.log"
+/*
+ * Mini3 port: channel 2 (/dev/uart3) is CONFIRMED correct unchanged from
+ * Nano3s -- live FPIOA register read on actual Mini3 hardware shows
+ * GPIO32=UART3_TXD, GPIO33=UART3_RXD (io_sel=3 on both, the ASIC-UART
+ * alt-function slot for those pins; see MINI3_GPIO_MAP.md). The physical
+ * TX/RX pin muxing is set up by the stock RT-Smart kernel partition at
+ * boot and is invisible to/unmanaged by this app layer either way -- only
+ * the channel index matters here, and it's the same index on both boards.
+ */
 #define STAGE1_UART_CHANNEL 2
 #define CHANNEL_PROBE_TIMEOUT_SEC 3
 
