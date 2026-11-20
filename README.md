@@ -1,5 +1,12 @@
 # mujina-miner
 
+> **⚠️ Work in progress.** This is an active port to the Avalon Mini3,
+> forked from the Nano3s version of this project. Core pieces (ASIC
+> UART channel, chain config/reset gate) are confirmed and have run on
+> real Mini3 hardware, but the port as a whole has not been through a
+> full mining soak test on the Mini3 yet. Expect rough edges, and treat
+> anything here as unverified for this board until stated otherwise.
+
 Open-source Bitcoin mining firmware.
 
 ## About This Fork
